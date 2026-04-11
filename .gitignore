@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db
+# Exclude raw data files everywhere except the bundled project data
+*.xlsx
+*.xls
+# Root-level CSVs (raw downloads)
+/*.csv
+# But track everything inside ercot_data/
+!ercot_data/*.csv
+.streamlit/secrets.toml
