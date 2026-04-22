@@ -36,7 +36,7 @@ ERCOT_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ercot
 # Full-year RTM hub price data — pre-converted from ERCOT MIS report 13061 XLSX.
 # One CSV per year, hub rows only (HB_WEST/NORTH/SOUTH/HOUSTON).
 # Source XLSX files are in ercot_rtm/; run convert_xlsx_to_csv.py once to generate these.
-ERCOT_RTM_CSV_DIR = r"C:\Users\Melvin Varghese\ercot_rtm_csv"
+ERCOT_RTM_CSV_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ercot_data")
 
 # Seasonal 3-month slices (original model).
 # Summer months are the highest-consistency revenue period (solar duck curve).
