@@ -33,16 +33,34 @@ DISCOUNT_RATE     = 0.08       # Equity hurdle rate / WACC proxy
 # ── Data paths ─────────────────────────────────────────────────────────────
 ERCOT_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ercot_data")
 
-# Three seasons available for comparison.
+# Full-year RTM hub price data — pre-converted from ERCOT MIS report 13061 XLSX.
+# One CSV per year, hub rows only (HB_WEST/NORTH/SOUTH/HOUSTON).
+# Source XLSX files are in ercot_rtm/; run convert_xlsx_to_csv.py once to generate these.
+ERCOT_RTM_CSV_DIR = r"C:\Users\Melvin Varghese\ercot_rtm_csv"
+
+# Seasonal 3-month slices (original model).
 # Summer months are the highest-consistency revenue period (solar duck curve).
 # Winter months have higher variance — potential for extreme weather-driven spikes.
 SEASONS = {
-    "Summer 2024":   ["June_2024.csv",    "July_2024.csv",    "August_2024.csv"],
-    "Winter 2024-25":["December_2024.csv","January_2025.csv", "February_2025.csv"],
-    "Summer 2025":   ["June_2025.csv",    "July_2025.csv",    "August_2025.csv"],
+    "Summer 2024":    ["June_2024.csv",    "July_2024.csv",    "August_2024.csv"],
+    "Winter 2024-25": ["December_2024.csv","January_2025.csv", "February_2025.csv"],
+    "Summer 2025":    ["June_2025.csv",    "July_2025.csv",    "August_2025.csv"],
+    "Full Year 2023": 2023,
+    "Full Year 2024": 2024,
+    "Full Year 2025": 2025,
 }
 
-DEFAULT_SEASON = "Summer 2024"
+# How many months each season entry covers — used to annualize revenue correctly.
+SEASON_MONTHS = {
+    "Summer 2024":    3,
+    "Winter 2024-25": 3,
+    "Summer 2025":    3,
+    "Full Year 2023": 12,
+    "Full Year 2024": 12,
+    "Full Year 2025": 12,
+}
+
+DEFAULT_SEASON = "Full Year 2024"
 
 HUBS = ["HB_WEST", "HB_NORTH", "HB_SOUTH", "HB_HOUSTON"]
 DEFAULT_HUB = "HB_WEST"   # West Texas: solar-rich, frequent low/negative prices

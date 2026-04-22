@@ -134,7 +134,7 @@ st.markdown("""
     </div>
     <p style="color:#475569; font-size:0.78rem; margin:0; font-family:'JetBrains Mono',monospace;">
         Battery dispatch simulation · Revenue stacking · Acquisition underwriting
-        &nbsp;|&nbsp; Summer 2024 · Winter 2024-25 · Summer 2025
+        &nbsp;|&nbsp; Full Year 2023 · Full Year 2024 · Full Year 2025 · Seasonal slices
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -196,7 +196,8 @@ def run_season(hub, season):
         charge_pct=charge_pct, discharge_pct=discharge_pct,
         ancillary_rate=ancillary_rate,
     )
-    ann      = annualize(result, data_months=3)
+    data_months = config.SEASON_MONTHS[season]
+    ann      = annualize(result, data_months=data_months)
     dispatch = result["dispatch_df"].copy()
     dispatch["datetime"] = lmp_df["datetime"].values
     return lmp_df, ann, dispatch
@@ -362,9 +363,10 @@ with tab2:
     st.plotly_chart(fig3, use_container_width=True)
 
     st.caption(
-        "Ancillary rate is a blended proxy (~$8/MW-hr for ECRS + Reg-Up/Reg-Down) "
-        "based on ERCOT published historical clearing price averages. "
-        "A production underwriting model uses actual hourly ancillary clearing price time series."
+        "Ancillary rate is a blended proxy ($/MW-hr for ECRS + Reg-Up/Reg-Down). "
+        "ERCOT DAM clearing prices averaged ~$38/MW-hr in 2023 (ECRS launch spike), "
+        "~$9/MW-hr in 2024 (close to the $8 default), and ~$4/MW-hr in 2025 (market saturation). "
+        "Adjust the slider above to reflect the year being underwritten."
     )
 
 
@@ -378,8 +380,9 @@ with tab3:
         "Both matter for a credible 20-year underwrite."
     )
 
+    SEASONAL_SLICES = ["Summer 2024", "Winter 2024-25", "Summer 2025"]
     season_results = {}
-    for s in config.SEASONS:
+    for s in SEASONAL_SLICES:
         _, ann_s, _ = run_season(hub, s)
         season_results[s] = ann_s
 
@@ -436,7 +439,7 @@ with tab3:
         "Summer 2025":    C_GREEN,
     }
     fig6 = go.Figure()
-    for s in config.SEASONS:
+    for s in SEASONAL_SLICES:
         lmp_s = get_lmp(hub, s)["lmp"]
         fig6.add_trace(go.Histogram(
             x=lmp_s, name=s, nbinsx=80, opacity=0.5,
